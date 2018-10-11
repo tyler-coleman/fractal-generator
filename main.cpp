@@ -8,16 +8,16 @@
 
 #include <iostream>
 #include "FractalCreator.h"
+#include "Screen.h"
 #include "RGB.h"
 
 using namespace std;
 
 int main(int argc, const char * argv[]) {
     
-    FractalCreator fractalCreator(800, 600);
+    FractalCreator fractalCreator(Screen::SCREEN_WIDTH, Screen::SCREEN_HEIGHT);
     
-    fractalCreator.addZoom(Zoom(295, 202, 0.1));
-    fractalCreator.addZoom(Zoom(312, 304, 0.1));
+    fractalCreator.addZoom(Zoom(300, 300, 0.6));
     
     // Need to ensure a start range (0.0) and an end range (1.0) are specified. All other ranges
     // should end between these two.

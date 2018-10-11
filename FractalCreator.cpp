@@ -7,6 +7,7 @@
 //
 
 #include <stdio.h>
+#include <iostream>
 #include <math.h>
 #include <memory>
 #include "FractalCreator.h"
@@ -18,6 +19,9 @@ FractalCreator::FractalCreator(int width, int height) : m_width(width), m_height
     
     // Initialize first zoom.
     m_zoomList.add(Zoom(m_width/2, m_height/2, 4.0/m_width));
+    if (!screen.init()) {
+        cout << "Error initializing SDL" << endl;
+    }
 }
 
 FractalCreator::~FractalCreator() {
@@ -26,15 +30,40 @@ FractalCreator::~FractalCreator() {
 
 void FractalCreator::run(string fileName) {
     
-    calculateIteration();
+    calculateIterations();
     calculateTotalIterations();
     calculateRangeTotals();
     drawFractal();
     
-    writeBitmap(fileName);
+    SDL_Event e;
+    
+    while (1) {
+        SDL_WaitEvent(&e);
+        if (e.type == SDL_QUIT) {
+            break;
+        }
+        if (e.type == SDL_MOUSEBUTTONDOWN) {
+            m_zoomList.add(Zoom(e.button.x, e.button.y, 0.8));
+            calculateIterations();
+            calculateTotalIterations();
+            calculateRangeTotals();
+            drawFractal();
+        }
+        if (e.type == SDL_KEYDOWN) {
+            if (e.key.keysym.sym == SDLK_BACKSPACE) {
+                m_zoomList.remove();
+                calculateIterations();
+                calculateTotalIterations();
+                calculateRangeTotals();
+                drawFractal();
+            }
+        }
+    }
+    
+    screen.close();
 }
 
-void FractalCreator::calculateIteration() {
+void FractalCreator::calculateIterations() {
     
     for (int y = 0; y < m_height; y++) {
         for (int x = 0; x < m_width; x++) {
@@ -81,8 +110,10 @@ void FractalCreator::drawFractal() {
             }
             
             m_bmp.setPixel(x, y, red, green, blue);
+            screen.setPixel(x, y, red, green, blue);
         }
     }
+    screen.update();
 }
 
 void FractalCreator::writeBitmap(string fileName) {

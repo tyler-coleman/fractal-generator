@@ -13,7 +13,8 @@ using namespace std;
 
 class Mandelbrot {
 public:
-    static const int MAX_ITERATIONS = 1000;
+    static const int MAX_ITERATIONS = 50;
+    static const int MIN_ITERATIONS = 50;
     
     Mandelbrot();
     virtual ~Mandelbrot();

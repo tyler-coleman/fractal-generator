@@ -26,6 +26,7 @@ private:
 public:
     ZoomList(int width, int height);
     void add(const Zoom &zoom);
+    void remove();
     pair<double, double> doZoom(int x, int y); // Takes pixel argument and returns some information about the new frame.
 };
 
